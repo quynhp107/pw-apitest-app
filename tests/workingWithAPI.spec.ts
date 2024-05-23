@@ -12,7 +12,7 @@ test.beforeEach(async ({ page }) => {
   await page.goto('https://conduit.bondaracademy.com/')
   await page.waitForTimeout(1000)
 })
-test('has title', async ({ page }) => {
+test.only('has title', async ({ page }) => {
   await page.route('*/**/api/articles*', async route => {
     const response = await route.fetch()
     const responseBody = await response.json()
