@@ -11,12 +11,12 @@ variables:
 
 steps:
   # Step 1: Checkout the repository
-  - task: Checkout@2
+  - checkout: self   # This will checkout the code from the current repository
 
   # Step 2: Set up Node.js (for Playwright)
   - task: UseNode@2
     inputs:
-      versionSpec: '20'  # You can choose the Node.js version you need
+      versionSpec: '16.x'  # You can choose the Node.js version you need
       addToPath: true
 
   # Step 3: Install dependencies
