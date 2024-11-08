@@ -1,0 +1,42 @@
+trigger:
+  branches:
+    include:
+      - main   # Trigger on pushes to the 'main' branch
+
+pool:
+  vmImage: 'ubuntu-latest'   # Use the latest Ubuntu image for the build agent
+
+variables:
+  NODE_ENV: 'production'
+
+steps:
+  # Step 1: Checkout the repository
+  - task: Checkout@2
+
+  # Step 2: Set up Node.js (for Playwright)
+  - task: UseNode@2
+    inputs:
+      versionSpec: '20'  # You can choose the Node.js version you need
+      addToPath: true
+
+  # Step 3: Install dependencies
+  - script: |
+      npm ci --force
+    displayName: 'Install dependencies'
+
+  # Step 4: Install Playwright Browsers
+  - script: |
+      npx playwright install --with-deps
+    displayName: 'Install Playwright Browsers'
+
+  # Step 5: Run Playwright tests
+  - script: |
+      npx playwright test
+    displayName: 'Run Playwright tests'
+
+  # Step 6: Upload test reports (if required)
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFiles: '**/test-results.xml'  # Path to your test results (if applicable)
+      testRunTitle: 'Playwright Test Run'
+      mergeTestResults: true
